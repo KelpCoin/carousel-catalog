@@ -3,7 +3,7 @@ const Stripe = require("stripe");
 const app = express();
 const port = process.env.PORT || 10000;
 if (!process.env.STRIPE_SECRET_KEY) { console.warn("No Stripe key - UI only"); process.env.STRIPE_SECRET_KEY = "sk_dummy"; }
-const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
+const stripe = Stripe('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');
 
 app.use((req,res,next)=>{res.setHeader("Content-Security-Policy","frame-ancestors 'self' https://*.notion.site https://*.super.site");next();});
 app.use(require("body-parser").json());
@@ -82,3 +82,4 @@ app.post("/checkout", async (req, res) => {
 
 app.get("/success", (req, res) => res.send("Payment successful "));
 app.listen(port, () => console.log("Carousel live on port " + port));
+
