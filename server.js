@@ -3,289 +3,277 @@ const Stripe = require("stripe");
 const app = express();
 const port = process.env.PORT || 10000;
 
-// STRIPE SETUP (never crashes the app)
+// --------------- STRIPE (always safe) ---------------
 let stripe = null;
 function getStripe() {
   const key = process.env.STRIPE_SECRET_KEY;
   if (!key) {
-    console.warn("STRIPE_SECRET_KEY missing  checkout disabled, catalog visible.");
+    console.warn(" STRIPE_SECRET_KEY missing  catalog visible, checkout disabled");
     return null;
   }
   if (!stripe) stripe = Stripe(key);
   return stripe;
 }
 
-// MIDDLEWARE
 app.use((req, res, next) => {
-  res.setHeader("Content-Security-Policy", "frame-ancestors 'self' https://*.notion.site https://*.super.site");
+  res.setHeader("Content-Security-Policy",
+    "frame-ancestors 'self' https://*.notion.site https://*.super.site");
   next();
 });
 app.use(require("body-parser").json());
 
-// PRODUCT CATALOG
+// --------------- PRODUCTS (gradient-only, zero AI slop) ---------------
 const PRODUCTS = [
-  { id:"mtg_diagnostic", name:"MTG Deck Diagnostic", price:2900, image:"https://images.unsplash.com/photo-1613771404721-1f92d6e1e5e1?w=600&h=400&fit=crop", tagline:"Pinpoint the 3 leaks costing you games  $29, 4hour turnaround" },
-  { id:"edh_sliver", name:"Sliver Overlord EDH Deck", price:14900, image:"https://images.unsplash.com/photo-1599742482470-8b5a7c91c2e1?w=600&h=400&fit=crop", tagline:"Fully tuned Commander deck, ready to dominate. Ships free." },
-  { id:"edh_zombie", name:"Zombie Horde EDH Deck", price:9900, image:"https://images.unsplash.com/photo-1600796885656-0b0f2a64c0a4?w=600&h=400&fit=crop", tagline:"Relentless recursion. Premium sleeves included." },
-  { id:"spreadsheet_rescue", name:"Spreadsheet Rescue", price:9900, image:"https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=600&h=400&fit=crop", tagline:"Broken formulas? Corrupted file? Fixed within 3 hours." },
-  { id:"banner_design", name:"Custom Banner Design", price:1500, image:"https://images.unsplash.com/photo-1561070791-2526d1b8e6a2?w=600&h=400&fit=crop", tagline:"YouTube / Twitch / Facebook  delivered in 24h" },
-  { id:"social_audit", name:"Social Media Audit", price:2500, image:"https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=600&h=400&fit=crop", tagline:"Growth strategy + profile review  know exactly what to fix" }
+  {
+    id: "mtg_diagnostic",
+    name: "MTG Deck Diagnostic",
+    price: 2900,
+    gradient: "linear-gradient(135deg, #1a1a2e, #16213e)",
+    tagline: "Three leaks costing you games  fixed in 4 hours"
+  },
+  {
+    id: "edh_sliver",
+    name: "Sliver Overlord EDH",
+    price: 14900,
+    gradient: "linear-gradient(135deg, #0f0f1a, #1a1a3e)",
+    tagline: "Fully tuned Commander deck. Ships free."
+  },
+  {
+    id: "edh_zombie",
+    name: "Zombie Horde EDH",
+    price: 9900,
+    gradient: "linear-gradient(135deg, #1a1a2e, #0f3460)",
+    tagline: "Relentless recursion. Premium sleeves."
+  },
+  {
+    id: "spreadsheet_rescue",
+    name: "Spreadsheet Rescue",
+    price: 9900,
+    gradient: "linear-gradient(135deg, #16213e, #0f3460)",
+    tagline: "Broken formulas? Corrupted file? Fixed in 3h."
+  },
+  {
+    id: "banner_design",
+    name: "Custom Banner Design",
+    price: 1500,
+    gradient: "linear-gradient(135deg, #1a1a2e, #533483)",
+    tagline: "YT / Twitch / FB  delivered in 24h"
+  },
+  {
+    id: "social_audit",
+    name: "Social Media Audit",
+    price: 2500,
+    gradient: "linear-gradient(135deg, #0f3460, #533483)",
+    tagline: "Growth strategy + profile review"
+  }
 ];
 
-// FRONTEND (Apple-sleek, Branson-experience)
+// --------------- FRONTEND (Apple-dark, glass, kinetic scroll) ---------------
 app.get("/", (req, res) => {
-  const stripeReady = !!process.env.STRIPE_SECRET_KEY;
-  const productsJson = JSON.stringify(PRODUCTS.map(p => ({
-    id: p.id, name: p.name, image: p.image, tagline: p.tagline,
-    priceLabel: `$${(p.price/100).toFixed(2)} NZD`,
-    buyEnabled: stripeReady
-  })));
+  const ready = !!process.env.STRIPE_SECRET_KEY;
 
   res.send(`<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>BrownEye Cortex Store</title>
-  <style>
-    :root {
-      --bg: #0b0b0f;
-      --card-bg: rgba(255,255,255,0.06);
-      --card-border: rgba(255,255,255,0.10);
-      --text: #f5f5f7;
-      --sub: #9a9aa3;
-      --accent: #0a84ff;
-      --accent-hover: #0077ed;
-    }
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
-      background: radial-gradient(1200px 800px at 50% -20%, rgba(10,132,255,0.25), transparent 60%),
-                  radial-gradient(900px 600px at 80% 120%, rgba(120,120,255,0.10), transparent 60%),
-                  var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
-    }
-    .header {
-      padding: 48px 32px 12px;
-      font-size: 32px;
-      font-weight: 600;
-      letter-spacing: -0.5px;
-      text-align: center;
-    }
-    .subheader {
-      padding: 0 32px 32px;
-      color: var(--sub);
-      font-size: 15px;
-      text-align: center;
-      max-width: 600px;
-    }
-    .carousel {
-      display: flex;
-      gap: 28px;
-      padding: 40px 32px 60px;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      scroll-behavior: smooth;
-      width: 100%;
-      max-width: 1200px;
-    }
-    .carousel::-webkit-scrollbar { display: none; }
-    .card {
-      flex: 0 0 340px;
-      border-radius: 28px;
-      scroll-snap-align: center;
-      background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
-      border: 1px solid var(--card-border);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-      transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.4, 1), box-shadow 0.4s;
-    }
-    .card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 30px 60px rgba(0,0,0,0.7);
-    }
-    .card-image {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-      border-bottom: 1px solid var(--card-border);
-    }
-    .card-body {
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-    }
-    .card-title {
-      font-size: 22px;
-      font-weight: 600;
-      letter-spacing: -0.3px;
-      margin-bottom: 6px;
-    }
-    .card-tagline {
-      font-size: 14px;
-      color: var(--sub);
-      margin-bottom: 16px;
-      line-height: 1.4;
-      flex: 1;
-    }
-    .card-price {
-      font-size: 28px;
-      font-weight: 600;
-      margin-bottom: 20px;
-    }
-    .buy-btn {
-      width: 100%;
-      padding: 14px;
-      border: none;
-      border-radius: 999px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      background: var(--accent);
-      color: white;
-      transition: all 0.2s ease;
-      letter-spacing: -0.2px;
-    }
-    .buy-btn:hover:not(:disabled) {
-      background: var(--accent-hover);
-      transform: scale(1.02);
-    }
-    .buy-btn:active:not(:disabled) {
-      transform: scale(0.98);
-    }
-    .buy-btn:disabled {
-      background: #555;
-      cursor: not-allowed;
-      opacity: 0.7;
-    }
-    .trust-badges {
-      display: flex;
-      justify-content: center;
-      gap: 24px;
-      margin-top: 12px;
-      font-size: 13px;
-      color: var(--sub);
-    }
-    .footer {
-      padding: 24px;
-      font-size: 12px;
-      color: var(--sub);
-      text-align: center;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>BrownEye Cortex</title>
+<style>
+  :root {
+    --bg: #0a0a0b;
+    --card-shadow: 0 25px 50px -12px rgba(0,0,0,0.6);
+    --text: #f5f5f7;
+    --sub: #98989d;
+    --accent: #0a84ff;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  .header {
+    padding: 56px 32px 8px;
+    font-size: 34px;
+    font-weight: 600;
+    letter-spacing: -0.6px;
+    text-align: center;
+  }
+  .sub {
+    padding: 0 32px 36px;
+    color: var(--sub);
+    font-size: 15px;
+    text-align: center;
+  }
+  .carousel {
+    display: flex;
+    gap: 28px;
+    padding: 0 32px 50px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    width: 100%;
+    max-width: 1200px;
+  }
+  .carousel::-webkit-scrollbar { display: none; }
+  .card {
+    flex: 0 0 320px;
+    height: 440px;
+    border-radius: 32px;
+    scroll-snap-align: center;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 32px 28px;
+    box-shadow: var(--card-shadow);
+    transition: transform 0.45s cubic-bezier(0.2,0.9,0.4,1), box-shadow 0.45s;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: inherit;
+    opacity: 0.25;
+    z-index: 0;
+  }
+  .card > * { position: relative; z-index: 1; }
+  .card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 35px 65px rgba(0,0,0,0.8);
+  }
+  .name {
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: -0.4px;
+    line-height: 1.2;
+    margin-bottom: 6px;
+  }
+  .tagline {
+    font-size: 14px;
+    color: var(--sub);
+    margin-bottom: 24px;
+    line-height: 1.4;
+  }
+  .price {
+    font-size: 36px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    margin-bottom: 28px;
+  }
+  .btn {
+    width: 100%;
+    padding: 15px;
+    border-radius: 30px;
+    border: none;
+    font-size: 16px;
+    font-weight: 590;
+    cursor: pointer;
+    background: var(--accent);
+    color: white;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    letter-spacing: -0.2px;
+  }
+  .btn:hover:not(:disabled) { background: #0077ed; transform: scale(1.02); }
+  .btn:active:not(:disabled) { transform: scale(0.98); }
+  .btn:disabled { background: #3a3a3c; cursor: not-allowed; }
+  .trust {
+    display: flex;
+    justify-content: center;
+    gap: 28px;
+    margin: 8px 0 24px;
+    font-size: 13px;
+    color: var(--sub);
+  }
+  .footer {
+    padding: 0 0 28px;
+    font-size: 12px;
+    color: #6e6e73;
+  }
+</style>
 </head>
 <body>
-  <div class="header">BrownEye Cortex</div>
-  <div class="subheader">
-    ${stripeReady ? "Instant checkout. Secure delivery. Satisfaction guaranteed." : "Catalog is live  checkout coming online shortly."}
-  </div>
-  <div class="carousel" id="carousel"></div>
-  <div class="trust-badges">
-    <span> Stripe Secure</span>
-    <span> Instant Delivery</span>
-    <span> MoneyBack Guarantee</span>
-  </div>
-  <div class="footer"> BrownEye Cortex  All transactions encrypted & protected</div>
+<div class="header">BrownEye Cortex</div>
+<div class="sub">${ready ? "Instant checkout  Secure delivery" : "Catalog is live  checkout coming online soon"}</div>
+<div class="carousel" id="carousel"></div>
+<div class="trust"><span> Stripe Secure</span><span> Instant Delivery</span><span> Guaranteed</span></div>
+<div class="footer"> BrownEye Cortex</div>
 
-  <script>
-    const PRODUCTS = ${productsJson};
-    const carousel = document.getElementById('carousel');
+<script>
+  const DATA = ${JSON.stringify(PRODUCTS.map(p => ({
+    id: p.id, name: p.name, price: p.price, tagline: p.tagline, gradient: p.gradient,
+    priceLabel: " $" + (p.price/100).toFixed(2) + " NZD",
+    buyEnabled: ${ready}
+  })))};
 
-    PRODUCTS.forEach((product, index) => {
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.innerHTML = \`
-        <img class="card-image" src="\${product.image}" alt="\${product.name}" loading="lazy">
-        <div class="card-body">
-          <div class="card-title">\${product.name}</div>
-          <div class="card-tagline">\${product.tagline}</div>
-          <div class="card-price">\${product.priceLabel}</div>
-          <button class="buy-btn" data-product-id="\${product.id}"
-            \${product.buyEnabled ? '' : 'disabled'}>
-            \${product.buyEnabled ? 'Buy Now' : 'Coming Soon'}
-          </button>
-        </div>
-      \`;
-      carousel.appendChild(card);
-    });
+  const carousel = document.getElementById("carousel");
+  DATA.forEach(p => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.style.background = p.gradient;
+    card.innerHTML = '<div class="name">' + p.name + '</div>' +
+                    '<div class="tagline">' + p.tagline + '</div>' +
+                    '<div class="price">' + p.priceLabel + '</div>' +
+                    '<button class="btn" data-pid="' + p.id + '"' + (p.buyEnabled ? '' : ' disabled') + '>' +
+                    (p.buyEnabled ? 'Buy Now' : 'Coming Soon') + '</button>';
+    carousel.appendChild(card);
+  });
 
-    // ----- BUY LOGIC (hardened, never fails silently) -----
-    async function buy(productId) {
-      const btn = document.querySelector(\`.buy-btn[data-product-id="\${productId}"]\`);
-      if (!btn || btn.disabled) {
-        alert("Checkout not available right now. Please try again later.");
-        return;
-      }
-      btn.disabled = true;
-      btn.textContent = "Preparing...";
-      try {
-        const r = await fetch('/checkout', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ productId })
-        });
-        const d = await r.json();
-        console.log("CHECKOUT RESPONSE:", d);
-        if (!r.ok) {
-          alert("Checkout failed: " + (d.message || d.error || "Unknown error"));
-          console.error("BAD RESPONSE:", d);
-          return;
-        }
-        if (!d.url) {
-          alert("No checkout URL returned. Please check the server logs.");
-          console.error("MISSING URL:", d);
-          return;
-        }
-        window.location.href = d.url;
-      } catch (e) {
-        console.error("BUY ERROR:", e);
-        alert("Network error. Please check your connection and try again.");
-      } finally {
-        btn.disabled = false;
-        btn.textContent = "Buy Now";
-      }
+  async function buy(productId) {
+    const btn = document.querySelector('.btn[data-pid="' + productId + '"]');
+    if (!btn || btn.disabled) return;
+    btn.disabled = true;
+    btn.textContent = "Preparing";
+    try {
+      const r = await fetch("/checkout", {
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({productId})
+      });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.message || d.error || "Unknown");
+      if (!d.url) throw new Error("No checkout URL");
+      window.location.href = d.url;
+    } catch(e) {
+      alert("Checkout failed: " + e.message);
+      console.error(e);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Buy Now";
     }
+  }
 
-    // Attach listeners
-    document.addEventListener('click', (e) => {
-      const btn = e.target.closest('.buy-btn');
-      if (!btn || btn.disabled) return;
-      e.preventDefault();
-      buy(btn.dataset.productId);
-    });
-  </script>
+  document.addEventListener("click", e => {
+    const btn = e.target.closest(".btn");
+    if (!btn || btn.disabled) return;
+    e.preventDefault();
+    buy(btn.dataset.pid);
+  });
+</script>
 </body>
 </html>`);
 });
 
-// CHECKOUT (fully observable, never returns undefined)
+// --------------- CHECKOUT (observable, never undefined) ---------------
 app.post("/checkout", async (req, res) => {
-  console.log("CHECKOUT HIT:", req.body);
   const stripeClient = getStripe();
-  if (!stripeClient) {
-    return res.status(503).json({ error: "Payment service not configured yet." });
-  }
+  if (!stripeClient) return res.status(503).json({ error: "Payment service not configured." });
 
   const product = PRODUCTS.find(p => p.id === req.body.productId);
-  if (!product) {
-    console.log("INVALID PRODUCT:", req.body.productId);
-    return res.status(400).json({ error: "Invalid product selected." });
-  }
+  if (!product) return res.status(400).json({ error: "Invalid product." });
 
-  const ref = "cortex_" + Date.now();
   try {
-    console.log("CREATING STRIPE SESSION FOR:", product.id);
     const session = await stripeClient.checkout.sessions.create({
       mode: "payment",
       payment_method_types: ["card"],
@@ -299,31 +287,16 @@ app.post("/checkout", async (req, res) => {
       }],
       success_url: (process.env.BASE_URL || "https://carousel-catalog.onrender.com") + "/success",
       cancel_url: (process.env.BASE_URL || "https://carousel-catalog.onrender.com"),
-      client_reference_id: ref
+      client_reference_id: "cortex_" + Date.now()
     });
-
-    console.log("SESSION CREATED:", session.id);
-    if (!session.url) {
-      console.error("NO SESSION URL:", session);
-      return res.status(500).json({ error: "Stripe session created but no URL returned." });
-    }
-
-    res.json({ url: session.url, ref });
-  } catch (err) {
-    console.error("STRIPE FAILURE FULL:", {
-      message: err.message,
-      type: err.type,
-      code: err.code,
-      raw: err.raw
-    });
-    res.status(500).json({ error: "stripe_fail", message: err.message });
+    if (!session.url) throw new Error("No URL from Stripe");
+    res.json({ url: session.url });
+  } catch (e) {
+    console.error("STRIPE ERROR:", e);
+    res.status(500).json({ error: "stripe_fail", message: e.message });
   }
 });
 
-app.get("/success", (req, res) => {
-  res.send(`<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Payment Confirmed</title><style>body{font-family:-apple-system,sans-serif;display:flex;height:100vh;align-items:center;justify-content:center;background:#0b0b0f;color:#f5f5f7;margin:0}.card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:28px;padding:3rem;text-align:center;backdrop-filter:blur(14px);}.card h1{font-size:2rem;margin-bottom:0.5rem}.card p{color:#9a9aa3}</style></head><body><div class="card"><h1> Payment Successful</h1><p>Thank you! You'll receive your order confirmation shortly.</p></div></body></html>`);
-});
+app.get("/success", (req, res) => res.send(`<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Paid</title><style>body{font-family:-apple-system,sans-serif;background:#0a0a0b;color:#f5f5f7;display:flex;height:100vh;align-items:center;justify-content:center;margin:0}.card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:28px;padding:3rem;text-align:center;backdrop-filter:blur(14px)}h1{font-size:2rem;margin-bottom:.5rem}p{color:#98989d}</style></head><body><div class="card"><h1> Paid</h1><p>Confirmation email incoming.</p></div></body></html>`));
 
-app.listen(port, () => {
-  console.log(`BrownEye Cortex live on port ${port}  checkout ${process.env.STRIPE_SECRET_KEY ? "ENABLED" : "DISABLED"}`);
-});
+app.listen(port, () => console.log("Cortex live :" + port + "  checkout " + (process.env.STRIPE_SECRET_KEY ? "ENABLED" : "DISABLED")));
