@@ -13,7 +13,7 @@ app.use((req, res, next) => {
 app.use(require("body-parser").json());
 
 const PRODUCTS = [
-    { id:"offer1", name:"Month-End Close Acceleration Kit", price:4900 },
+     { id:"edh_zombie", name:"Zombie Horde EDH Deck", price:9900 },
     { id:"offer2", name:"SOC2 Evidence Pack", price:9700 },
     { id:"offer3", name:"Automation Audit Diagnostic", price:19700 }
 ];
