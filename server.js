@@ -2,10 +2,7 @@ const express = require("express");
 const Stripe = require("stripe");
 const app = express();
 const port = process.env.PORT || 10000;
-if (!process.env.STRIPE_SECRET_KEY) { process.env.STRIPE_SECRET_KEY = 'sk_test_12345'; console.warn('USING DUMMY STRIPE KEY'); } // FIXED:
-    console.error("FATAL: STRIPE_SECRET_KEY missing");
-    process.exit(1);
-}
+
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
 app.use((req, res, next) => {
@@ -83,4 +80,5 @@ app.post("/checkout", async (req, res) => {
 
 app.get("/success", (req, res) => res.send("Payment successful "));
 app.listen(port, () => console.log("Carousel live on port " + port));
+
 
