@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Cinema Hub</title>
+<style>
+:root{--bg:#0B0E11;--cardBg:#1E2329;--gold:#F0B90B;--text:#EAECEF;--muted:#848E9C;--radius:12px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh}
+.ticker{background:var(--cardBg);border-bottom:1px solid #2B3139;padding:0.7rem 1.5rem;text-align:center;color:var(--gold);font-size:0.85rem;letter-spacing:0.5px;position:sticky;top:0;z-index:10}
+.hero{text-align:center;padding:3rem 1.5rem 2rem}
+.hero h1{font-size:2.2rem;color:var(--gold);margin-bottom:0.5rem;letter-spacing:-0.5px}
+.hero p{color:var(--muted);font-size:1rem}
+.carousel{display:flex;overflow-x:auto;gap:1.2rem;padding:0 1.5rem 2rem;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+.slide{min-width:300px;max-width:340px;scroll-snap-align:center;flex-shrink:0}
+.card{background:var(--cardBg);border:1px solid #2B3139;border-radius:var(--radius);padding:1.5rem;height:100%;display:flex;flex-direction:column;justify-content:space-between;transition:border-color 0.2s}
+.card:hover{border-color:var(--gold)}
+.card:first-child{border-color:var(--gold);box-shadow:0 0 24px rgba(240,185,11,0.15)}
+.layer{font-size:0.7rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--gold);margin-bottom:0.75rem}
+.card h2{font-size:1.2rem;line-height:1.4;margin-bottom:0.5rem}
+.sales{font-size:0.8rem;color:var(--muted);margin-bottom:0.75rem}
+.badge{display:inline-block;background:var(--gold);color:var(--bg);padding:3px 10px;border-radius:4px;font-size:0.7rem;font-weight:700;margin-bottom:0.75rem}
+.cta{display:block;background:var(--gold);color:var(--bg);text-align:center;padding:0.75rem;border-radius:8px;font-weight:700;text-decoration:none;margin-top:auto;transition:filter 0.2s}
+.cta:hover{filter:brightness(1.15)}
+.trust{display:flex;justify-content:center;gap:2rem;padding:1rem 1.5rem;border-top:1px solid #2B3139;color:var(--muted);font-size:0.75rem}
+.footer{text-align:center;padding:1rem;color:var(--muted);font-size:0.7rem}
+.card.empty{text-align:center;border-style:dashed}
+.card.empty h2{color:var(--muted)}
+@media(min-width:768px){.carousel{justify-content:center}}
+</style></head><body>
+<div class="ticker">Live  2 ledger events  Cinema Hub Active</div>
+<div class="hero"><h1>Cinema Hub</h1><p>Live probe auction  ranked by real revenue</p></div>
+<div class="carousel"><div class='slide'><div class='card'><div class='layer'>SIGNAL </div><h2>Test probe  I will build a real one after trust-building</h2><p class='sales'>0 sales</p><a class='cta' href='https://buy.stripe.com/test_placeholder'>Get It Now</a></div></div></div>
+<div class="trust"><span>Stripe-secured</span><span>Instant Delivery</span><span>Ledger-Verified</span></div>
+<div class="footer">Powered by Cortex  Refresh for updated rankings</div>
+</body></html>
