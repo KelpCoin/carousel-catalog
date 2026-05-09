@@ -1,0 +1,9 @@
+{
+    "name":  "carousel-catalog",
+    "version":  "1.0.0",
+    "main":  "server.js",
+    "dependencies":  {
+                         "express":  "^4.18.2",
+                         "stripe":  "^14.0.0"
+                     }
+}
