@@ -1,32 +1,52 @@
-﻿<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Cinema Hub</title>
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carousel Catalog</title>
 <style>
-:root{--bg:#0B0E11;--cardBg:#1E2329;--gold:#F0B90B;--text:#EAECEF;--muted:#848E9C;--radius:12px}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh}
-.ticker{background:var(--cardBg);border-bottom:1px solid #2B3139;padding:0.7rem 1.5rem;text-align:center;color:var(--gold);font-size:0.85rem;letter-spacing:0.5px;position:sticky;top:0;z-index:10}
-.hero{text-align:center;padding:3rem 1.5rem 2rem}
-.hero h1{font-size:2.2rem;color:var(--gold);margin-bottom:0.5rem;letter-spacing:-0.5px}
-.hero p{color:var(--muted);font-size:1rem}
-.carousel{display:flex;overflow-x:auto;gap:1.2rem;padding:0 1.5rem 2rem;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
-.slide{min-width:300px;max-width:340px;scroll-snap-align:center;flex-shrink:0}
-.card{background:var(--cardBg);border:1px solid #2B3139;border-radius:var(--radius);padding:1.5rem;height:100%;display:flex;flex-direction:column;justify-content:space-between;transition:border-color 0.2s}
-.card:hover{border-color:var(--gold)}
-.card:first-child{border-color:var(--gold);box-shadow:0 0 24px rgba(240,185,11,0.15)}
-.layer{font-size:0.7rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--gold);margin-bottom:0.75rem}
-.card h2{font-size:1.2rem;line-height:1.4;margin-bottom:0.5rem}
-.sales{font-size:0.8rem;color:var(--muted);margin-bottom:0.75rem}
-.badge{display:inline-block;background:var(--gold);color:var(--bg);padding:3px 10px;border-radius:4px;font-size:0.7rem;font-weight:700;margin-bottom:0.75rem}
-.cta{display:block;background:var(--gold);color:var(--bg);text-align:center;padding:0.75rem;border-radius:8px;font-weight:700;text-decoration:none;margin-top:auto;transition:filter 0.2s}
-.cta:hover{filter:brightness(1.15)}
-.trust{display:flex;justify-content:center;gap:2rem;padding:1rem 1.5rem;border-top:1px solid #2B3139;color:var(--muted);font-size:0.75rem}
-.footer{text-align:center;padding:1rem;color:var(--muted);font-size:0.7rem}
-.card.empty{text-align:center;border-style:dashed}
-.card.empty h2{color:var(--muted)}
-@media(min-width:768px){.carousel{justify-content:center}}
-</style></head><body>
-<div class="ticker">Live  2 ledger events  Cinema Hub Active</div>
-<div class="hero"><h1>Cinema Hub</h1><p>Live probe auction  ranked by real revenue</p></div>
-<div class="carousel"><div class='slide'><div class='card'><div class='layer'>SIGNAL </div><h2>Test probe  I will build a real one after trust-building</h2><p class='sales'>0 sales</p><a class='cta' href='https://buy.stripe.com/test_placeholder'>Get It Now</a></div></div></div>
-<div class="trust"><span>Stripe-secured</span><span>Instant Delivery</span><span>Ledger-Verified</span></div>
-<div class="footer">Powered by Cortex  Refresh for updated rankings</div>
-</body></html>
+  body { background:#0B0E11; color:#EAECEF; font-family:Arial; margin:0; padding:0; }
+  .container { max-width:900px; margin:0 auto; padding:30px 20px; }
+  h1,h2,h3 { color:#F0B90B; }
+  .card { background:#1E2329; border:1px solid #2B3139; border-radius:8px; padding:20px; margin:20px 0; }
+  button, .btn { background:#F0B90B; color:#0B0E11; border:none; padding:12px 24px; font-weight:bold; border-radius:4px; cursor:pointer; }
+  button:hover { background:#FCD535; }
+  input[type="text"] { padding:10px; border:1px solid #F0B90B; background:#1E2329; color:#EAECEF; border-radius:4px; width:250px; }
+  img { border:2px solid #F0B90B; border-radius:8px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Carousel Catalog</h1>
+  <div class="card">
+    <h2>Commander Deck Diagnostic</h2>
+    <p>Find out exactly why your deck feels inconsistent.  NZD.</p>
+    <a class="btn" href="https://your-payment-link.com">Get Diagnostic</a>
+  </div>
+
+  <h3>Free Avatar Generator</h3>
+  <input type="text" id="avatarName" placeholder="Enter a name or phrase">
+  <button onclick="generateAvatar()">Generate Avatar</button>
+  <br><br>
+  <canvas id="avatarCanvas" width="120" height="120" style="display:none;"></canvas>
+  <script>
+    function generateAvatar() {
+      const name = document.getElementById('avatarName').value.trim() || 'guest';
+      const canvas = document.getElementById('avatarCanvas');
+      canvas.style.display = 'block';
+      const ctx = canvas.getContext('2d');
+      const seed = name.split('').reduce((a,c)=>a+c.charCodeAt(0),0);
+      ctx.fillStyle = '#0B0E11';
+      ctx.fillRect(0,0,120,120);
+      ctx.fillStyle = '#F0B90B';
+      ctx.fillRect(30,40,60,20);
+      ctx.fillRect(45,60,30,10);
+      ctx.fillStyle = '#1E2329';
+      ctx.beginPath(); ctx.arc(60,60,10,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#F0B90B';
+      ctx.font = '10px Arial'; ctx.fillText(name.substring(0,4), 40, 110);
+    }
+  </script>
+</div>
+</body>
+</html>
