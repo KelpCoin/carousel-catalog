@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>Pulse Collective</title>
-  <!-- Swiper CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
@@ -14,20 +13,10 @@
       background: radial-gradient(circle at 50% 0%, #1e222b, #0a0c10 80%);
       min-height: 100vh;
     }
-    .swiper {
-      width: 100%;
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 40px 0 20px;
-    }
+    .swiper { width: 100%; max-width: 600px; margin: 0 auto; padding: 40px 0 20px; }
     .swiper-slide {
-      background: rgba(25,27,33,0.85);
-      border: 1px solid #2a2d35;
-      border-radius: 12px;
-      backdrop-filter: blur(8px);
-      padding: 30px;
-      text-align: center;
-      height: auto;
+      background: rgba(25,27,33,0.85); border: 1px solid #2a2d35;
+      border-radius: 12px; backdrop-filter: blur(8px); padding: 30px; text-align: center; height: auto;
     }
     .swiper-slide h2 { color:#CBA96B; margin-bottom:15px; font-weight:500; }
     .swiper-slide p { color:#b0b3b8; margin-bottom:20px; line-height:1.5; }
@@ -50,42 +39,73 @@
       margin:15px auto 0; overflow:hidden; background:#1a1c22; display:none;
     }
     #avatar-container img { width:100%; height:100%; object-fit:cover; }
+    .avatar-styles { display:flex; gap:10px; justify-content:center; margin-top:10px; }
+    .style-btn {
+      padding:6px 14px; border:1px solid #2a2d35; background:rgba(25,27,33,0.8);
+      color:#CBA96B; border-radius:4px; cursor:pointer; font-size:12px;
+    }
+    .style-btn.active { background:#CBA96B; color:#0b0c0f; }
     .swipe-hint { text-align:center; color:#6b6e76; font-size:12px; margin:10px 0; }
     .arrow-row { display:flex; justify-content:center; gap:30px; margin:8px 0; color:#CBA96B; font-size:24px; user-select:none; cursor:pointer; opacity:0.7; }
     .swiper-button-next, .swiper-button-prev { color:#CBA96B !important; }
     .swiper-pagination-bullet { background:#CBA96B !important; }
+    .cosmetics-preview { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-top:15px; }
+    .cosmetic-item {
+      width:48px; height:48px; border-radius:8px; border:2px solid #2a2d35;
+      background:#1a1c22; display:flex; align-items:center; justify-content:center;
+      font-size:20px; cursor:pointer; opacity:0.6; transition:all 0.2s;
+    }
+    .cosmetic-item:hover { opacity:1; border-color:#CBA96B; }
+    .cosmetic-item.locked { opacity:0.3; cursor:not-allowed; }
+    .cosmetic-item.premium { border-color:#F0B90B; }
+    .price-tag { font-size:9px; color:#CBA96B; margin-top:2px; }
   </style>
 </head>
 <body>
   <h1>Pulse Collective</h1>
 
-  <!-- Arrows ABOVE -->
   <div class="arrow-row" id="arrowTop"><span>&#10094;</span><span>&#10095;</span></div>
-
   <div class="swiper mySwiper">
-    <div class="swiper-wrapper" id="product-slides">
-      <!-- Slides injected dynamically from JS -->
-    </div>
+    <div class="swiper-wrapper" id="product-slides"></div>
     <div class="swiper-pagination"></div>
     <div class="swiper-button-prev"></div>
     <div class="swiper-button-next"></div>
   </div>
-
   <div class="swipe-hint">&#8592; swipe or tap arrows &#8594;</div>
   <div class="arrow-row" id="arrowBottom"><span>&#10094;</span><span>&#10095;</span></div>
 
   <div class="avatar-section">
     <h3 style="color:#CBA96B;">Free Avatar Generator</h3>
+    <p style="color:#6b6e76; font-size:12px; margin-bottom:10px;">
+      Your character for Pulse Collective &amp; Kelphaven
+    </p>
     <input type="text" id="avatarName" placeholder="Your name or phrase">
     <button class="btn" onclick="generateAvatar()">Generate</button>
     <br>
+    <div class="avatar-styles">
+      <button class="style-btn active" onclick="setStyle('avataaars')">Cartoon</button>
+      <button class="style-btn" onclick="setStyle('bottts')">Robot</button>
+      <button class="style-btn" onclick="setStyle('adventurer')">Adventurer</button>
+    </div>
     <div id="avatar-container"><img id="avatar-img" src="" alt="Your avatar"></div>
+
+    <!-- Cosmetics Preview (Freemium Demo) -->
+    <div class="cosmetics-preview">
+      <div class="cosmetic-item" title="Default Outfit"></div>
+      <div class="cosmetic-item premium" title="Gold Crown  .99"><span class="price-tag"></span></div>
+      <div class="cosmetic-item premium" title="Cool Shades  .99"><span class="price-tag"></span></div>
+      <div class="cosmetic-item locked" title="Dragon Armor  .99"><span class="price-tag"></span></div>
+      <div class="cosmetic-item locked" title="Wizard Hat  .99"><span class="price-tag"></span></div>
+      <div class="cosmetic-item locked" title="Angel Wings  .99"><span class="price-tag"></span></div>
+    </div>
+    <p style="color:#6b6e76; font-size:10px; margin-top:8px;">
+       Premium cosmetics available soon  free avatar forever
+    </p>
   </div>
 
-  <!-- Swiper JS -->
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script>
-    // === Product Data (update your Gumroad links here) ===
+    // === Product Data (replace links with real Gumroad URLs) ===
     const products = [
       {
         name: "Commander Deck Diagnostic",
@@ -110,9 +130,9 @@
       }
     ];
 
-    // === Build slides dynamically ===
+    // Build slides
     const wrapper = document.getElementById('product-slides');
-    products.forEach((p, i) => {
+    products.forEach((p) => {
       const qrUrl = https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=;
       wrapper.innerHTML += 
         <div class="swiper-slide">
@@ -128,17 +148,15 @@
       ;
     });
 
-    // === Initialize Swiper ===
+    // Swiper
     const swiper = new Swiper('.mySwiper', {
-      loop: true,
-      spaceBetween: 20,
-      centeredSlides: true,
+      loop: true, spaceBetween: 20, centeredSlides: true,
       pagination: { el: '.swiper-pagination', clickable: true },
       navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
       breakpoints: { 320: { slidesPerView: 1 }, 768: { slidesPerView: 1 } }
     });
 
-    // === Arrow rows (manual triggers) ===
+    // Arrow rows
     document.querySelectorAll('.arrow-row').forEach(row => {
       row.addEventListener('click', e => {
         const rect = row.getBoundingClientRect();
@@ -147,26 +165,51 @@
       });
     });
 
-    // === Avatar Generator (DiceBear Avataaars  Bitmoji-style) ===
+    // === AVATAR GENERATOR (v9 DiceBear  multiple styles, always shows something) ===
+    let currentStyle = 'avataaars';
+
+    function setStyle(style) {
+      currentStyle = style;
+      document.querySelectorAll('.style-btn').forEach(b => b.classList.remove('active'));
+      document.querySelector(.style-btn[onclick="setStyle('')"]).classList.add('active');
+      generateAvatar();
+    }
+
     function generateAvatar() {
       const name = document.getElementById('avatarName').value.trim() || 'Commander';
       const container = document.getElementById('avatar-container');
       const img = document.getElementById('avatar-img');
       const seed = name.replace(/\s+/g, '-').toLowerCase();
-      // Avataaars style: full cartoon human with hair, eyes, clothes
-      img.src = https://api.dicebear.com/7.x/avataaars/svg?seed=;
-      img.onerror = () => {
-        const initials = name.split(' ').map(w => w[0]).join('').toUpperCase().substring(0,2);
-        const canvas = document.createElement('canvas');
-        canvas.width = 120; canvas.height = 120;
-        const ctx = canvas.getContext('2d');
-        ctx.fillStyle = '#CBA96B'; ctx.fillRect(0,0,120,120);
-        ctx.fillStyle = '#0b0c0f'; ctx.font = '45px Arial'; ctx.textAlign = 'center';
-        ctx.fillText(initials, 60, 70);
-        img.src = canvas.toDataURL();
+
+      // Primary: DiceBear v9 Avataaars (full cartoon human  Bitmoji-style)
+      const primaryUrl = https://api.dicebear.com/9.x//svg?seed=;
+
+      // Fallback: if v9 fails, try v7 Bottts (robot)
+      const fallbackUrl = https://api.dicebear.com/7.x/bottts/svg?seed=;
+
+      let triedFallback = false;
+
+      img.onerror = function() {
+        if (!triedFallback) {
+          triedFallback = true;
+          img.src = fallbackUrl;
+        } else {
+          // Both external APIs failed  local canvas fallback
+          const initials = name.split(' ').map(w => w[0]).join('').toUpperCase().substring(0,2);
+          const canvas = document.createElement('canvas');
+          canvas.width = 120; canvas.height = 120;
+          const ctx = canvas.getContext('2d');
+          ctx.fillStyle = '#CBA96B'; ctx.fillRect(0,0,120,120);
+          ctx.fillStyle = '#0b0c0f'; ctx.font = '45px Arial'; ctx.textAlign = 'center';
+          ctx.fillText(initials, 60, 70);
+          img.src = canvas.toDataURL();
+        }
       };
+
+      img.src = primaryUrl;
       container.style.display = 'block';
     }
+
     window.addEventListener('load', () => generateAvatar());
   </script>
 </body>
