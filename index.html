@@ -1,52 +1,149 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Carousel Catalog</title>
-<style>
-  body { background:#0B0E11; color:#EAECEF; font-family:Arial; margin:0; padding:0; }
-  .container { max-width:900px; margin:0 auto; padding:30px 20px; }
-  h1,h2,h3 { color:#F0B90B; }
-  .card { background:#1E2329; border:1px solid #2B3139; border-radius:8px; padding:20px; margin:20px 0; }
-  button, .btn { background:#F0B90B; color:#0B0E11; border:none; padding:12px 24px; font-weight:bold; border-radius:4px; cursor:pointer; }
-  button:hover { background:#FCD535; }
-  input[type="text"] { padding:10px; border:1px solid #F0B90B; background:#1E2329; color:#EAECEF; border-radius:4px; width:250px; }
-  img { border:2px solid #F0B90B; border-radius:8px; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Kelplantis Carousel</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:#0B0E11; color:#EAECEF; font-family:Arial,sans-serif; overflow-x:hidden; }
+    .container { max-width:650px; margin:0 auto; padding:20px; }
+    h1 { color:#F0B90B; text-align:center; margin-bottom:10px; }
+    .ticker { background:#1E2329; border:1px solid #2B3139; border-radius:6px; padding:10px; margin:15px 0; overflow:hidden; white-space:nowrap; }
+    .ticker span { display:inline-block; padding-left:100%; animation:scroll 20s linear infinite; color:#FCD535; }
+    @keyframes scroll { 0% { transform:translateX(0); } 100% { transform:translateX(-100%); } }
+    .video-container { position:relative; padding-bottom:56.25%; height:0; overflow:hidden; margin-bottom:20px; border-radius:12px; }
+    .video-container iframe { position:absolute; top:0; left:0; width:100%; height:100%; border:none; }
+    .carousel-wrapper { position:relative; overflow:hidden; border-radius:12px; margin-bottom:20px; }
+    .carousel-track { display:flex; transition:transform 0.3s ease; }
+    .card { min-width:100%; background:#1E2329; border:1px solid #2B3139; border-radius:12px; padding:30px; text-align:center; }
+    .card h2 { color:#F0B90B; margin-bottom:15px; }
+    .card p { margin-bottom:20px; line-height:1.5; }
+    .btn { display:inline-block; background:#F0B90B; color:#0B0E11; padding:12px 30px; border-radius:6px; text-decoration:none; font-weight:bold; margin:5px; }
+    .btn:hover { background:#FCD535; }
+    .nav-buttons { display:flex; justify-content:center; gap:20px; margin-top:15px; }
+    .nav-btn { background:#2B3139; color:#EAECEF; border:none; padding:10px 20px; border-radius:6px; cursor:pointer; font-size:18px; }
+    .nav-btn:hover { background:#F0B90B; color:#0B0E11; }
+    .avatar-section { text-align:center; margin-top:30px; }
+    .avatar-section input { padding:12px 15px; border:1px solid #F0B90B; background:#1E2329; color:#EAECEF; border-radius:6px; width:200px; margin-right:10px; }
+    .avatar-section button { padding:12px 20px; }
+    #avatar-img { width:100px; height:100px; border-radius:50%; border:2px solid #F0B90B; margin-top:15px; display:none; }
+    .cosmetics { margin-top:20px; background:#1E2329; border-radius:12px; padding:20px; }
+    .cosmetics h3 { color:#F0B90B; margin-bottom:10px; }
+    .cosmetics-item { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid #2B3139; }
+    .cosmetics-item:last-child { border-bottom:none; }
+    .cosmetics-item span { flex:1; }
+    .transfer-section { text-align:center; margin-top:20px; }
+    .qr-section { text-align:center; margin-top:20px; }
+    .qr-section img { width:150px; height:150px; }
+    @media (max-width:480px) { .container { padding:10px; } }
+  </style>
 </head>
 <body>
-<div class="container">
-  <h1>Carousel Catalog</h1>
-  <div class="card">
-    <h2>Commander Deck Diagnostic</h2>
-    <p>Find out exactly why your deck feels inconsistent.  NZD.</p>
-    <a class="btn" href="https://your-payment-link.com">Get Diagnostic</a>
+  <div class="container">
+    <h1> Kelplantis</h1>
+    <div class="ticker"><span> New Avatar Cosmetics Shop live! |  Transfer your avatar to Kelplantis now! |  Commander Diagnostic  NZD</span></div>
+    
+    <!-- Cinema Embed (replace with your own trailer) -->
+    <div class="video-container">
+      <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Kelplantis Trailer" allowfullscreen></iframe>
+    </div>
+
+    <!-- Carousel -->
+    <div class="carousel-wrapper">
+      <div class="carousel-track" id="carouselTrack">
+        <div class="card">
+          <h2>Commander Deck Diagnostic</h2>
+          <p>Find out exactly why your deck feels inconsistent. Detailed breakdown + fix suggestions.</p>
+          <a class="btn" href="https://your-payment-link.com"> NZD  Get Diagnostic</a>
+        </div>
+        <div class="card">
+          <h2>AI Context Handover Kit</h2>
+          <p>Stop reexplaining yourself to AI. One template, infinite context.</p>
+          <a class="btn" href="https://your-other-link.com">  Download</a>
+        </div>
+        <div class="card">
+          <h2>Automation Starter Pack</h2>
+          <p>5 Windows scripts to eliminate digital drudgery.</p>
+          <a class="btn" href="https://your-third-link.com">  Get Pack</a>
+        </div>
+      </div>
+    </div>
+    <div class="nav-buttons">
+      <button class="nav-btn" onclick="moveCarousel(-1)">&#10094;</button>
+      <button class="nav-btn" onclick="moveCarousel(1)">&#10095;</button>
+    </div>
+
+    <!-- Avatar Generator -->
+    <div class="avatar-section">
+      <h3 style="color:#F0B90B;">Free Avatar Generator</h3>
+      <input type="text" id="avatarName" placeholder="Your name or phrase">
+      <button class="btn" onclick="generateAvatar()">Generate</button>
+      <br>
+      <img id="avatar-img" src="" alt="Your avatar">
+    </div>
+
+    <!-- Cosmetics Shop -->
+    <div class="cosmetics">
+      <h3> Avatar Cosmetics Shop</h3>
+      <div class="cosmetics-item"><span> Top Hat</span> <a class="btn" href="https://buy.stripe.com/hat-link" target="_blank"></a></div>
+      <div class="cosmetics-item"><span> Cool Shades</span> <a class="btn" href="https://buy.stripe.com/shades-link" target="_blank">.50</a></div>
+      <div class="cosmetics-item"><span> Gold Jacket</span> <a class="btn" href="https://buy.stripe.com/jacket-link" target="_blank"></a></div>
+    </div>
+
+    <!-- Transfer to Kelplantis -->
+    <div class="transfer-section">
+      <button class="btn" onclick="transferAvatar()" style="background:#FCD535; color:#0B0E11;"> Transfer Avatar to Kelplantis</button>
+      <p id="transfer-status" style="margin-top:10px; color:#EAECEF;"></p>
+    </div>
+
+    <!-- QR Code -->
+    <div class="qr-section">
+      <p style="color:#F0B90B; margin-bottom:10px;">Scan to share</p>
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://carousel-catalog.onrender.com" alt="QR Code">
+    </div>
   </div>
 
-  <h3>Free Avatar Generator</h3>
-  <input type="text" id="avatarName" placeholder="Enter a name or phrase">
-  <button onclick="generateAvatar()">Generate Avatar</button>
-  <br><br>
-  <canvas id="avatarCanvas" width="120" height="120" style="display:none;"></canvas>
   <script>
-    function generateAvatar() {
-      const name = document.getElementById('avatarName').value.trim() || 'guest';
-      const canvas = document.getElementById('avatarCanvas');
-      canvas.style.display = 'block';
-      const ctx = canvas.getContext('2d');
-      const seed = name.split('').reduce((a,c)=>a+c.charCodeAt(0),0);
-      ctx.fillStyle = '#0B0E11';
-      ctx.fillRect(0,0,120,120);
-      ctx.fillStyle = '#F0B90B';
-      ctx.fillRect(30,40,60,20);
-      ctx.fillRect(45,60,30,10);
-      ctx.fillStyle = '#1E2329';
-      ctx.beginPath(); ctx.arc(60,60,10,0,Math.PI*2); ctx.fill();
-      ctx.fillStyle = '#F0B90B';
-      ctx.font = '10px Arial'; ctx.fillText(name.substring(0,4), 40, 110);
+    let currentIndex = 0;
+    const track = document.getElementById('carouselTrack');
+    const cards = document.querySelectorAll('.card');
+    const totalCards = cards.length;
+
+    function moveCarousel(direction) {
+      currentIndex = (currentIndex + direction + totalCards) % totalCards;
+      track.style.transform = 	ranslateX(-%);
     }
+
+    function generateAvatar() {
+      const name = document.getElementById('avatarName').value.trim();
+      if (!name) return;
+      const seed = name.replace(/\s+/g, '-').toLowerCase();
+      const url = https://api.dicebear.com/7.x/bottts/svg?seed=&backgroundColor=b6e3f4,c0aede,d1d4f9;
+      const img = document.getElementById('avatar-img');
+      img.src = url;
+      img.style.display = 'block';
+    }
+
+    function transferAvatar() {
+      const avatarUrl = document.getElementById('avatar-img').src;
+      if (!avatarUrl) {
+        document.getElementById('transfer-status').innerText = " Generate an avatar first!";
+        return;
+      }
+      // Generate a unique token (this would later tie to your game's auth)
+      const token = 'KELP-' + Math.random().toString(36).substr(2, 8).toUpperCase();
+      document.getElementById('transfer-status').innerHTML =  Transfer token: <strong></strong><br>Use this code in Kelplantis to receive your avatar.;
+      // Optionally, save the token + avatar URL to a local server or database for later retrieval.
+    }
+
+    // Swipe support for mobile
+    let touchStartX = 0;
+    track.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; });
+    track.addEventListener('touchend', e => {
+      const diff = touchStartX - e.changedTouches[0].screenX;
+      if (Math.abs(diff) > 40) { moveCarousel(diff > 0 ? 1 : -1); }
+    });
   </script>
-</div>
 </body>
 </html>
