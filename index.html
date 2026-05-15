@@ -3,118 +3,97 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Carousel Catalog</title>
+  <title>Pulse Collective</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * { margin:0; padding:0; box-sizing:border-box; }
     body {
-      background: radial-gradient(circle at 50% 0%, #1a1f2b, #0B0E11 80%);
+      font-family: 'Segoe UI', system-ui, sans-serif;
       color: #EAECEF;
-      font-family: Arial, sans-serif;
       overflow-x: hidden;
-      min-height: 100vh;
+      background: #0a0c10;
     }
-    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-    h1 { color: #F0B90B; text-align: center; margin-bottom: 20px; letter-spacing: 1px; }
+    .video-bg {
+      position: fixed; right:0; bottom:0; min-width:100%; min-height:100%;
+      z-index:-1; opacity:0.25;
+    }
+    .overlay {
+      position: relative; z-index:1; padding:20px; max-width:600px; margin:0 auto;
+    }
+    h1 {
+      color:#CBA96B; text-align:center; margin:20px 0; font-weight:400; letter-spacing:1px;
+    }
     .arrow-row {
-      display: flex;
-      justify-content: center;
-      gap: 30px;
-      margin: 8px 0;
-      color: #F0B90B;
-      font-size: 24px;
-      user-select: none;
+      display:flex; justify-content:center; gap:30px; margin:8px 0;
+      color:#CBA96B; font-size:24px; user-select:none; cursor:pointer; opacity:0.7;
     }
-    .arrow-row span { opacity: 0.6; }
-    .carousel-wrapper { position: relative; overflow: hidden; border-radius: 12px; }
-    .carousel-track { display: flex; transition: transform 0.3s ease; }
+    .carousel-wrapper {
+      position:relative; overflow:hidden; border-radius:12px;
+      background: rgba(25,27,33,0.85); backdrop-filter: blur(8px);
+      border:1px solid #2a2d35;
+    }
+    .carousel-track { display:flex; transition:transform 0.3s ease; }
     .card {
-      min-width: 100%;
-      background: #1E2329;
-      border: 1px solid #2B3139;
-      border-radius: 12px;
-      padding: 30px;
-      text-align: center;
+      min-width:100%; padding:30px; text-align:center; border-right:1px solid #2a2d35;
     }
-    .card h2 { color: #F0B90B; margin-bottom: 15px; }
-    .card p { margin-bottom: 20px; line-height: 1.5; }
+    .card h2 { color:#CBA96B; margin-bottom:15px; font-weight:500; }
+    .card p { margin-bottom:20px; line-height:1.5; color:#b0b3b8; }
     .btn {
-      display: inline-block;
-      background: #F0B90B;
-      color: #0B0E11;
-      padding: 12px 30px;
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: bold;
+      display:inline-block; background:#CBA96B; color:#0b0c0f; padding:12px 30px;
+      border-radius:6px; text-decoration:none; font-weight:600; letter-spacing:0.5px;
+      transition: background 0.2s;
     }
-    .btn:hover { background: #FCD535; }
-    .swipe-hint {
-      text-align: center;
-      color: #848E9C;
-      font-size: 12px;
-      margin: 8px 0;
-    }
-    .avatar-section { text-align: center; margin-top: 30px; }
+    .btn:hover { background:#d4b87a; }
+    .swipe-hint { text-align:center; color:#6b6e76; font-size:12px; margin:8px 0; }
+    .avatar-section { text-align:center; margin-top:30px; }
     .avatar-section input {
-      padding: 12px 15px;
-      border: 1px solid #F0B90B;
-      background: #1E2329;
-      color: #EAECEF;
-      border-radius: 6px;
-      width: 200px;
-      margin-right: 10px;
+      padding:12px 15px; border:1px solid #2a2d35;
+      background: rgba(25,27,33,0.8); color:#E0E0E0; border-radius:6px;
+      width:200px; margin-right:10px;
     }
-    .avatar-section button { padding: 12px 20px; }
     #avatar-container {
-      width: 100px; height: 100px;
-      border-radius: 50%;
-      border: 2px solid #F0B90B;
-      margin: 15px auto 0;
-      overflow: hidden;
-      background: #1E2329;
-      display: none;
+      width:120px; height:120px; border-radius:50%; border:2px solid #CBA96B;
+      margin:15px auto 0; overflow:hidden; background:#1a1c22; display:none;
     }
-    #avatar-container img { width: 100%; height: 100%; object-fit: cover; }
-    .qr-section { text-align: center; margin-top: 30px; }
-    .qr-section img { width: 150px; height: 150px; }
-    @media (max-width: 768px) {
-      .qr-section { display: none; }
-    }
+    #avatar-container img { width:100%; height:100%; object-fit:cover; }
+    .qr-section { text-align:center; margin-top:30px; }
+    .qr-section img { width:150px; height:150px; }
+    @media (max-width:768px) { .qr-section { display:none; } }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>BrownEye Carousel</h1>
-    <!-- Arrows ABOVE -->
-    <div class="arrow-row">
-      <span>&#10094;</span><span>&#10095;</span>
-    </div>
+  <!-- Embedded background video (free from Coverr) -->
+  <video class="video-bg" autoplay loop muted playsinline>
+    <source src="https://cdn.coverr.co/videos/coverr-abstract-particles-loop-2646/1080p.mp4" type="video/mp4">
+  </video>
+
+  <div class="overlay">
+    <h1>Pulse Collective</h1>
+
+    <div class="arrow-row" id="arrowTop"><span>&#10094;</span><span>&#10095;</span></div>
     <div class="carousel-wrapper">
       <div class="carousel-track" id="carouselTrack">
         <div class="card">
           <h2>Commander Deck Diagnostic</h2>
           <p>Find out exactly why your deck feels inconsistent. Detailed breakdown + fix suggestions.</p>
-          <a class="btn" href="https://your-payment-link.com"> NZD  Get Diagnostic</a>
+          <a class="btn" href="YOUR_GUMROAD_OR_STRIPE_LINK"> NZD  Get Diagnostic</a>
         </div>
         <div class="card">
           <h2>AI Context Handover Kit</h2>
           <p>Stop reexplaining yourself to AI. One template, infinite context.</p>
-          <a class="btn" href="https://your-other-link.com">  Download</a>
+          <a class="btn" href="YOUR_GUMROAD_OR_STRIPE_LINK">  Download</a>
         </div>
         <div class="card">
           <h2>Automation Starter Pack</h2>
           <p>5 Windows scripts to eliminate digital drudgery.</p>
-          <a class="btn" href="https://your-third-link.com">  Get Pack</a>
+          <a class="btn" href="YOUR_GUMROAD_OR_STRIPE_LINK">  Get Pack</a>
         </div>
       </div>
     </div>
     <div class="swipe-hint">&#8592; swipe or tap arrows &#8594;</div>
-    <!-- Arrows BELOW -->
-    <div class="arrow-row">
-      <span>&#10094;</span><span>&#10095;</span>
-    </div>
+    <div class="arrow-row" id="arrowBottom"><span>&#10094;</span><span>&#10095;</span></div>
 
     <div class="avatar-section">
-      <h3 style="color:#F0B90B;">Free Avatar Generator</h3>
+      <h3 style="color:#CBA96B;">Free Avatar Generator</h3>
       <input type="text" id="avatarName" placeholder="Your name or phrase">
       <button class="btn" onclick="generateAvatar()">Generate</button>
       <br>
@@ -122,7 +101,7 @@
     </div>
 
     <div class="qr-section">
-      <p style="color:#F0B90B; margin-bottom:10px;">Scan to share this carousel</p>
+      <p style="color:#CBA96B; margin-bottom:10px;">Scan to share</p>
       <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://carousel-catalog.onrender.com" alt="QR Code">
     </div>
   </div>
@@ -138,7 +117,6 @@
       track.style.transform = 	ranslateX(-%);
     }
 
-    // Clickable arrow rows
     document.querySelectorAll('.arrow-row').forEach(row => {
       row.addEventListener('click', e => {
         const rect = row.getBoundingClientRect();
@@ -153,27 +131,22 @@
       const container = document.getElementById('avatar-container');
       const img = document.getElementById('avatar-img');
       const seed = name.replace(/\s+/g, '-').toLowerCase();
-      // Try DiceBear avataaars first (closest to Bitmoji)
       img.src = https://api.dicebear.com/7.x/avataaars/svg?seed=;
       img.onerror = function() {
-        // Fallback: initials silhouette
         const initials = name.split(' ').map(w => w[0]).join('').toUpperCase().substring(0,2);
         const canvas = document.createElement('canvas');
-        canvas.width = 100; canvas.height = 100;
+        canvas.width = 120; canvas.height = 120;
         const ctx = canvas.getContext('2d');
-        ctx.fillStyle = '#F0B90B'; ctx.fillRect(0,0,100,100);
-        ctx.fillStyle = '#0B0E11'; ctx.font = '40px Arial'; ctx.textAlign = 'center';
-        ctx.fillText(initials, 50, 60);
+        ctx.fillStyle = '#CBA96B'; ctx.fillRect(0,0,120,120);
+        ctx.fillStyle = '#0b0c0f'; ctx.font = '45px Arial'; ctx.textAlign = 'center';
+        ctx.fillText(initials, 60, 70);
         img.src = canvas.toDataURL();
       };
       container.style.display = 'block';
     }
 
-    // Mobile swipe
     let touchStartX = 0;
-    track.addEventListener('touchstart', e => {
-      touchStartX = e.changedTouches[0].screenX;
-    });
+    track.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; });
     track.addEventListener('touchend', e => {
       const diff = touchStartX - e.changedTouches[0].screenX;
       if (Math.abs(diff) > 40) moveCarousel(diff > 0 ? 1 : -1);
